@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<estabelecimentos>
+  <estabelecimento idEstabelecimentoBaseDados="1" nomeEstabelecimento="Pet Shop" />
+  <estabelecimento idEstabelecimentoBaseDados="2" nomeEstabelecimento="Agropecuária" />
+  <estabelecimento idEstabelecimentoBaseDados="3" nomeEstabelecimento="Clínica Veterinária" />
+  <estabelecimento idEstabelecimentoBaseDados="3" nomeEstabelecimento="Consultório Veterinário" />
+  <estabelecimento idEstabelecimentoBaseDados="4" nomeEstabelecimento="Hospital Veterinário" />
+  <estabelecimento idEstabelecimentoBaseDados="5" nomeEstabelecimento="Hotel para animais" />
+  <estabelecimento idEstabelecimentoBaseDados="6" nomeEstabelecimento="Creche para animais" />
+</estabelecimentos>
