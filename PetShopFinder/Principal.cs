@@ -46,7 +46,7 @@ namespace PetShopFinder
             ListarXml();
 
             ListarEstados();
-            
+
             //Carrega as chaves que serão utilizadas nas requisições do google places
             cboKeys.DataSource = Chaves.ListarChaves();
             cboKeys.ValueMember = "Chave";
@@ -242,7 +242,7 @@ namespace PetShopFinder
             cboEstado.DataSource = listaEstados;
             cboEstado.ValueMember = "siglaEstado";
             cboEstado.DisplayMember = "NomeEstado";
-            
+
             /*
             dtbEstados.Clear();
             using (SqlConnection conn = new SqlConnection(strConexao))
@@ -354,7 +354,7 @@ namespace PetShopFinder
                 RequisicoesEfetuadas = intRequisicoesEfetuadas
             };
 
-            txtLogExecucao.Text=  txtLogExecucao.Text.Insert(0, LogExecucao.IncluirLogExecucao(log) + Environment.NewLine + Environment.NewLine);
+            txtLogExecucao.Text = txtLogExecucao.Text.Insert(0, LogExecucao.IncluirLogExecucao(log) + Environment.NewLine + Environment.NewLine);
             //txtLogExecucao.AppendText();
         }
 
@@ -459,7 +459,7 @@ namespace PetShopFinder
 
                                 IncluirLog(key, cboEstabelecimento.GetItemText(cboEstabelecimento.Items[es]), cboEstado.Text, cboCidade.Text, cboBairro.Text);
                                 //ListarXml();
-                                
+
                                 //Requisição TextSearch
                                 GetTextSearch(cboEstabelecimento.GetItemText(cboEstabelecimento.Items[es]), cboEstado.Text, cboCidade.Text, cboBairro.Text, ref key);
                             }
@@ -480,7 +480,7 @@ namespace PetShopFinder
             StringBuilder erros = new StringBuilder();
             StringBuilder statusReq = new StringBuilder();
             string runSQL = "", cep = "", logradouro = "", numero = "", bairro = "", complemento = "", endereco = "", url = "", query = "";
-            
+
 
             Thread.CurrentThread.CurrentCulture = new CultureInfo("pt-BR");
             Thread.CurrentThread.CurrentUICulture = new CultureInfo("pt-BR");
@@ -493,7 +493,7 @@ namespace PetShopFinder
                 //Requisição TextSearch
                 url = string.Format("https://maps.googleapis.com/maps/api/place/textsearch/json?{0}&key={1}", query, key);
             }
-            
+
             System.Net.WebRequest request = System.Net.WebRequest.Create(url);
             System.Net.WebResponse response = request.GetResponse();
             intRequisicoesEfetuadas += 1;
@@ -523,7 +523,7 @@ namespace PetShopFinder
                     if (intStatus == 3) //Trocar chave de requisição
                     {
                         int intIndex = cboKeys.SelectedIndex;
-                        if ((cboKeys.Items.Count -1 ) > intIndex)
+                        if ((cboKeys.Items.Count - 1) > intIndex)
                         {
                             cboKeys.SelectedIndex = intIndex + 1;
                             key = cboKeys.Text;
@@ -565,7 +565,7 @@ namespace PetShopFinder
                                     intTentativas = 0;
                                     goto ATUALIZALOG;
                                 }
-                                
+
                                 if (intStatus == 3) //Trocar chave de requisição
                                 {
                                     int intIndex = cboKeys.SelectedIndex;
@@ -597,7 +597,11 @@ namespace PetShopFinder
                                     if (elemento.Length > 0) { logradouro = elemento[0]; }
                                     if (elemento.Length > 1) { numero = elemento[1]; }
                                 }
-                                
+
+                                int active = 1;
+                                if (!IsValidNomeFantasia(responseDataDetail.result.name))
+                                    active = 0;
+
                                 runSQL = @"INSERT INTO [dbo].[Estabelecimento] 
                                            ([NomeFantasia],[PaisId],[EstadoId],[CidadeId],[CEP],[Logradouro],[Numero],[Complemento],[Ativo],
                                             [Telefone1],[Site],[Bairro],[Longitude],[Latitude],[InicioSegunda],[InicioTerca],[InicioQuarta],[InicioQuinta],[InicioSexta],
@@ -606,32 +610,32 @@ namespace PetShopFinder
                                 runSQL +=
                   /* NomeFantasia          */ "'" + responseDataDetail.result.name.Replace("'", "''") + "'," +
                   /* PaisId                */ "1," +
-                  /* EstadoId              */ listaEstados.Where(w=> w.SiglaEstado.Equals(cboEstado.SelectedValue.ToString())).Single().IdEstado + "," + //BuscarIdEstado(cboEstado.SelectedValue.ToString()) + "," +
-                  /* CidadeId              */ cboCidade.SelectedValue.ToString() + "," +
+                  /* EstadoId              */ listaEstados.Where(w => w.SiglaEstado.Equals(cboEstado.SelectedValue.ToString())).Single().IdEstado + "," + //BuscarIdEstado(cboEstado.SelectedValue.ToString()) + "," +
+                                                                                                                                                          /* CidadeId              */ cboCidade.SelectedValue.ToString() + "," +
                   /* CEP                   */ "'" + cep + "'," +
                   /* Logradouro            */ "'" + logradouro.Replace("'", "''") + "'," +
                   /* Numero                */ "'" + numero + "'," +
                   /* Complemento           */ "'" + complemento.Replace("'", "''") + "'," +
-                  /* Ativo                 */ "1," +
+                  /* Ativo                 */  active + "," +
                   /* Telefone1             */ "'" + responseDataDetail.result.formatted_phone_number + "'," +
                   /* Site                  */ "'" + responseDataDetail.result.website + "'," +
                   /* Bairro                */ "'" + bairro.Replace("'", "''") + "'," +
                   /* Longitude             */ responseDataDetail.result.geometry.location.lng.ToString().Replace(",", ".") + "," +
                   /* Latitude              */ responseDataDetail.result.geometry.location.lat.ToString().Replace(",", ".") + "," +
-                  /* InicioSegunda         */ "'" + VerificarHorarioFuncionamento(responseDataDetail, "segunda-feira:",0, "M") + "'," +
-                  /* InicioTerca           */ "'" + VerificarHorarioFuncionamento(responseDataDetail, "terça-feira:",1, "M") + "'," +
-                  /* InicioQuarta          */ "'" + VerificarHorarioFuncionamento(responseDataDetail, "quarta-feira:",2, "M") + "'," +
-                  /* InicioQuinta          */ "'" + VerificarHorarioFuncionamento(responseDataDetail, "quinta-feira:",3, "M") + "'," +
-                  /* InicioSexta           */ "'" + VerificarHorarioFuncionamento(responseDataDetail, "sexta-feira:",4, "M") + "'," +
-                  /* InicioSabado          */ "'" + VerificarHorarioFuncionamento(responseDataDetail, "sábado:",5, "M") + "'," +
-                  /* InicioDomingo         */ "'" + VerificarHorarioFuncionamento(responseDataDetail, "domingo:",6, "M") + "'," +
-                  /* FimSegunda            */ "'" + VerificarHorarioFuncionamento(responseDataDetail, "segunda-feira:",0, "T") + "'," +
-                  /* FimTerca              */ "'" + VerificarHorarioFuncionamento(responseDataDetail, "terça-feira:",1, "T") + "'," +
-                  /* FimQuarta             */ "'" + VerificarHorarioFuncionamento(responseDataDetail, "quarta-feira:",2, "T") + "'," +
-                  /* FimQuinta             */ "'" + VerificarHorarioFuncionamento(responseDataDetail, "quinta-feira:",3, "T") + "'," +
-                  /* FimSexta              */ "'" + VerificarHorarioFuncionamento(responseDataDetail, "sexta-feira:",4, "T") + "'," +
-                  /* FimSabado             */ "'" + VerificarHorarioFuncionamento(responseDataDetail, "sábado:",5, "T") + "'," +
-                  /* FimDomingo            */ "'" + VerificarHorarioFuncionamento(responseDataDetail, "domingo:",6, "T") + "')";
+                  /* InicioSegunda         */ "'" + VerificarHorarioFuncionamento(responseDataDetail, "segunda-feira:", 0, "M") + "'," +
+                  /* InicioTerca           */ "'" + VerificarHorarioFuncionamento(responseDataDetail, "terça-feira:", 1, "M") + "'," +
+                  /* InicioQuarta          */ "'" + VerificarHorarioFuncionamento(responseDataDetail, "quarta-feira:", 2, "M") + "'," +
+                  /* InicioQuinta          */ "'" + VerificarHorarioFuncionamento(responseDataDetail, "quinta-feira:", 3, "M") + "'," +
+                  /* InicioSexta           */ "'" + VerificarHorarioFuncionamento(responseDataDetail, "sexta-feira:", 4, "M") + "'," +
+                  /* InicioSabado          */ "'" + VerificarHorarioFuncionamento(responseDataDetail, "sábado:", 5, "M") + "'," +
+                  /* InicioDomingo         */ "'" + VerificarHorarioFuncionamento(responseDataDetail, "domingo:", 6, "M") + "'," +
+                  /* FimSegunda            */ "'" + VerificarHorarioFuncionamento(responseDataDetail, "segunda-feira:", 0, "T") + "'," +
+                  /* FimTerca              */ "'" + VerificarHorarioFuncionamento(responseDataDetail, "terça-feira:", 1, "T") + "'," +
+                  /* FimQuarta             */ "'" + VerificarHorarioFuncionamento(responseDataDetail, "quarta-feira:", 2, "T") + "'," +
+                  /* FimQuinta             */ "'" + VerificarHorarioFuncionamento(responseDataDetail, "quinta-feira:", 3, "T") + "'," +
+                  /* FimSexta              */ "'" + VerificarHorarioFuncionamento(responseDataDetail, "sexta-feira:", 4, "T") + "'," +
+                  /* FimSabado             */ "'" + VerificarHorarioFuncionamento(responseDataDetail, "sábado:", 5, "T") + "'," +
+                  /* FimDomingo            */ "'" + VerificarHorarioFuncionamento(responseDataDetail, "domingo:", 6, "T") + "')";
 
                                 try
                                 {
@@ -667,7 +671,8 @@ namespace PetShopFinder
                     statusReq.Clear();
                     runSQL = ""; cep = ""; logradouro = ""; numero = ""; bairro = ""; complemento = "";
 
-                    if (intStatus == 3) {
+                    if (intStatus == 3)
+                    {
                         System.Environment.Exit(-1);
                     }
 
@@ -698,21 +703,107 @@ namespace PetShopFinder
 
                 if (strTurno == "M")
                 {
-                    strRetorno = diaSemana.Split(',').Length > 0 ? diaSemana.Split(',')[0].Split('–')[0].Trim() : diaSemana.Split('–')[0].Trim();
+                    if (diaSemana.LastIndexOf("24 horas") != -1)
+                        strRetorno = "00:00";
+                    else
+                        strRetorno = diaSemana.LastIndexOf(',') != -1 ? diaSemana.Split(',')[0].Split('–')[0].Trim() : diaSemana.Split('–')[0].Trim();
                 }
                 else //strTurno =="T"
                 {
-                    strRetorno = diaSemana.Split(',').Length > 0 ? diaSemana.Split(',')[1].Split('–')[1].Trim() : diaSemana.Split('–')[1].Trim();
+                    if (diaSemana.LastIndexOf("24 horas") != -1)
+                        strRetorno = "23:59";
+                    else
+                        strRetorno = diaSemana.LastIndexOf(',') != -1 ? diaSemana.Split(',')[1].Split('–')[1].Trim() : diaSemana.Split('–')[1].Trim();
                 }
 
                 if (strRetorno == "Fechado") { strRetorno = ""; }
-                if (strRetorno == "Atendimento 24 horas") { strRetorno = "00:00"; }
             }
             catch
             {
                 strRetorno = "";
             }
             return strRetorno;
+        }
+
+        private bool IsValidNomeFantasia(string nomeFantasia)
+        {
+
+            if (nomeFantasia.ToUpper().LastIndexOf("SUPER") != -1)
+                return false;
+
+            if (nomeFantasia.ToUpper().LastIndexOf("ADVOGA") != -1)
+                return false;
+
+            if (nomeFantasia.ToUpper().LastIndexOf("POUSADA") != -1)
+                return false;
+
+            if (nomeFantasia.ToUpper().LastIndexOf("FUNDAÇÃO") != -1)
+                return false;
+
+            if (nomeFantasia.ToUpper().LastIndexOf("RESORT") != -1)
+                return false;
+
+            if (nomeFantasia.ToUpper().LastIndexOf("RESORT") != -1)
+                return false;
+
+            if (nomeFantasia.ToUpper().LastIndexOf("LOCAÇÃO") != -1)
+                return false;
+
+            if (nomeFantasia.ToUpper().LastIndexOf("LOCAÇÃO") != -1)
+                return false;
+
+            if (nomeFantasia.ToUpper().LastIndexOf("ESCOLA") != -1)
+                return false;
+
+            if (nomeFantasia.ToUpper().LastIndexOf("ZOOLÓGICO") != -1)
+                return false;
+
+            if (nomeFantasia.ToUpper().LastIndexOf("ZOOLÓGICO") != -1)
+                return false;
+
+            if (nomeFantasia.ToUpper().LastIndexOf("CENTRO ESPÍRITA") != -1)
+                return false;
+
+            if (nomeFantasia.ToUpper().LastIndexOf("SHOPPING") != -1)
+                return false;
+
+            if (nomeFantasia.ToUpper().LastIndexOf("CENTRO OFTALMOLOGISTA") != -1)
+                return false;
+
+            if (nomeFantasia.ToUpper().LastIndexOf("UNIVERSIDADE") != -1)
+                return false;
+
+            if (nomeFantasia.ToUpper().LastIndexOf("JORNAL") != -1)
+                return false;
+
+            if (nomeFantasia.ToUpper().LastIndexOf("CONSELHO") != -1)
+                return false;
+
+            if (nomeFantasia.ToUpper().LastIndexOf("PREFEITURA") != -1)
+                return false;
+
+            if (nomeFantasia.ToUpper().LastIndexOf("PREFEITURA") != -1)
+                return false;
+
+            if (nomeFantasia.ToUpper().LastIndexOf("CLUBE") != -1)
+                return false;
+
+            if (nomeFantasia.ToUpper().LastIndexOf("CHAVEIRO") != -1)
+                return false;
+
+            if (nomeFantasia.ToUpper().LastIndexOf("ACADEMIA") != -1)
+                return false;
+
+            if (nomeFantasia.ToUpper().LastIndexOf("MÓVEIS") != -1)
+                return false;
+
+            if (nomeFantasia.ToUpper().LastIndexOf("PARÓQUIA") != -1)
+                return false;
+
+            if (nomeFantasia.ToUpper().LastIndexOf("IGREJA") != -1)
+                return false;
+
+            return true;
         }
 
         private int BuscarIdEstado(string strSiglaEstado)
@@ -912,7 +1003,7 @@ namespace PetShopFinder
                 if (!Directory.Exists(diretorio))
                     Directory.CreateDirectory(diretorio);
 
-                using (FileStream fs = File.Create(diretorio + "\\" + string.Format("{0:yyyyMMdd-HHmmss}", DateTime.Now) + "_StatusRequisicao_" + estado + "_" + cidade + "_" + bairro + "_" + estabelecimento.Replace(" ","") + ".txt"))
+                using (FileStream fs = File.Create(diretorio + "\\" + string.Format("{0:yyyyMMdd-HHmmss}", DateTime.Now) + "_StatusRequisicao_" + estado + "_" + cidade + "_" + bairro + "_" + estabelecimento.Replace(" ", "") + ".txt"))
                 {
                     using (StreamWriter sw = new StreamWriter(fs))
                     {
@@ -1143,6 +1234,6 @@ namespace PetShopFinder
         }
 
         #endregion
-              
+
     }
 }
