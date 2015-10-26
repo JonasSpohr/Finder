@@ -25,6 +25,7 @@ namespace PetShopFinder
         DataTable dtbCidades = new DataTable();
         DataTable dtbBairros = new DataTable();
         List<LogExecucao> logExecucao;
+        List<Estados> listaEstados;
         string strConexao = "Data Source=n4jokuco18.database.windows.net;Initial Catalog=DBPet;Persist Security Info=True;User ID=petlogin;Password=!Leo2014";
         int intStatus = 1;
         int intTentativas = 0;
@@ -42,17 +43,10 @@ namespace PetShopFinder
 
         private void frmPrincipal_Load(object sender, EventArgs e)
         {
-            //Chamada necessária:
-            //FixBrowser();
-            //webBrowser1.ScriptErrorsSuppressed = true;
-            //webBrowser1.Navigate("https://www.google.com.br/maps");
-
             ListarXml();
 
             ListarEstados();
-            //ListarCidades();
-            //
-
+            
             //Carrega as chaves que serão utilizadas nas requisições do google places
             cboKeys.DataSource = Chaves.ListarChaves();
             cboKeys.ValueMember = "Chave";
@@ -243,6 +237,13 @@ namespace PetShopFinder
 
         private void ListarEstados()
         {
+            //Carrega os estabelecimentos que serão pesquisados
+            listaEstados = Estados.ListarEstados();
+            cboEstado.DataSource = listaEstados;
+            cboEstado.ValueMember = "siglaEstado";
+            cboEstado.DisplayMember = "NomeEstado";
+            
+            /*
             dtbEstados.Clear();
             using (SqlConnection conn = new SqlConnection(strConexao))
             {
@@ -260,6 +261,7 @@ namespace PetShopFinder
 
                 conn.Close();
             }
+            */
         }
 
         private void ListarCidades()
@@ -604,7 +606,7 @@ namespace PetShopFinder
                                 runSQL +=
                   /* NomeFantasia          */ "'" + responseDataDetail.result.name.Replace("'", "''") + "'," +
                   /* PaisId                */ "1," +
-                  /* EstadoId              */ BuscarIdEstado(cboEstado.SelectedValue.ToString()) + "," +
+                  /* EstadoId              */ listaEstados.Where(w=> w.SiglaEstado.Equals(cboEstado.SelectedValue.ToString())).Single().IdEstado + "," + //BuscarIdEstado(cboEstado.SelectedValue.ToString()) + "," +
                   /* CidadeId              */ cboCidade.SelectedValue.ToString() + "," +
                   /* CEP                   */ "'" + cep + "'," +
                   /* Logradouro            */ "'" + logradouro.Replace("'", "''") + "'," +
@@ -704,6 +706,7 @@ namespace PetShopFinder
                 }
 
                 if (strRetorno == "Fechado") { strRetorno = ""; }
+                if (strRetorno == "Atendimento 24 horas") { strRetorno = "00:00"; }
             }
             catch
             {
