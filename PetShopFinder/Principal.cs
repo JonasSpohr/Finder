@@ -88,22 +88,22 @@ namespace PetShopFinder
 
         private void inícioToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            webBrowser1.Navigate("https://developers.google.com/places/?hl=pt-br");
+            //webBrowser1.Navigate("https://developers.google.com/places/?hl=pt-br");
         }
 
         private void gerarChaveToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            webBrowser1.Navigate("https://developers.google.com/places/webservice/intro#Authentication");
+            //webBrowser1.Navigate("https://developers.google.com/places/webservice/intro#Authentication");
         }
 
         private void textSearchToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            webBrowser1.Navigate("https://developers.google.com/places/webservice/search#TextSearchRequests");
+            //webBrowser1.Navigate("https://developers.google.com/places/webservice/search#TextSearchRequests");
         }
 
         private void detailSearchToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            webBrowser1.Navigate("https://developers.google.com/places/web-service/details?hl=pt-br");
+            //webBrowser1.Navigate("https://developers.google.com/places/web-service/details?hl=pt-br");
         }
 
         private void sobrePetShopFinderToolStripMenuItem_Click(object sender, EventArgs e)
@@ -220,10 +220,10 @@ namespace PetShopFinder
             {
                 //Chamada necessária:
                 FixBrowser();
-                webBrowser1.ScriptErrorsSuppressed = true;
+                //webBrowser1.ScriptErrorsSuppressed = true;
             }
             blnFixBrowser = false;
-            webBrowser1.Navigate("https://www.google.com.br/maps/" + MontarStringNavegacaoGoogleMaps());
+            //webBrowser1.Navigate("https://www.google.com.br/maps/" + MontarStringNavegacaoGoogleMaps());
         }
 
         private void btnImportar_Click(object sender, EventArgs e)
@@ -376,6 +376,12 @@ namespace PetShopFinder
                 int bairro = cboBairro.SelectedIndex;
                 int estabelecimento = cboEstabelecimento.SelectedIndex;
 
+                if (!string.IsNullOrWhiteSpace(txtLogRequisicao.Text))
+                    if (MessageBox.Show("Voce gostaria de limpar o log de requisicões?", "Confirmação", MessageBoxButtons.OKCancel) == DialogResult.OK)
+                    {
+                        txtLogRequisicao.Text = "";
+                    }
+
                 //Verifica se a checkbox "Todos os Estados" está marcada para iniciar o loop por Estados, Cidades e Bairros
                 if (chkEstado.Checked)
                 {
@@ -491,7 +497,14 @@ namespace PetShopFinder
                 //Monta a query para a requisição no google places
                 query = MontarStringNavegacaoGooglePlaces(_estabelecimento, _estado, _cidade, _bairro);
                 //Requisição TextSearch
-                url = string.Format("https://maps.googleapis.com/maps/api/place/textsearch/json?{0}&key={1}", query, key);
+                url = string.Format("https://maps.googleapis.com/maps/api/place/textsearch/json?{0}&types=pet_store|veterinary_care|store|hospital|establishment&key={1}", query, key);
+
+                txtLogRequisicao.AppendText(Environment.NewLine);
+                txtLogRequisicao.AppendText("### nova requisição: TEXTSEARCH");
+                txtLogRequisicao.AppendText(Environment.NewLine);
+                txtLogRequisicao.AppendText(url);
+                txtLogRequisicao.AppendText(Environment.NewLine);
+                txtLogRequisicao.AppendText(Environment.NewLine);
             }
 
             System.Net.WebRequest request = System.Net.WebRequest.Create(url);
@@ -540,6 +553,16 @@ namespace PetShopFinder
                     DETAILSPLACE:
                         //Requisição Detail
                         url = string.Format("https://maps.googleapis.com/maps/api/place/details/json?placeid={0}&key={1}&language=pt-BR", item.place_id, key);
+
+                        txtLogRequisicao.AppendText(Environment.NewLine);
+                        txtLogRequisicao.AppendText("### nova requisição: DETAIL");
+                        txtLogRequisicao.AppendText(Environment.NewLine);
+                        txtLogRequisicao.AppendText(url);
+                        txtLogRequisicao.AppendText(Environment.NewLine);
+                        txtLogRequisicao.AppendText("### Nomes Encontrados:");
+                        txtLogRequisicao.AppendText(Environment.NewLine);
+                        txtLogRequisicao.AppendText(Environment.NewLine);
+
                         request = System.Net.WebRequest.Create(url);
                         response = request.GetResponse();
                         intRequisicoesEfetuadas += 1;
@@ -598,6 +621,9 @@ namespace PetShopFinder
                                     if (elemento.Length > 1) { numero = elemento[1]; }
                                 }
 
+                                txtLogRequisicao.AppendText(responseDataDetail.result.name);
+                                txtLogRequisicao.AppendText(Environment.NewLine);
+
                                 int active = 1;
                                 if (!IsValidNomeFantasia(responseDataDetail.result.name))
                                     active = 0;
@@ -639,7 +665,9 @@ namespace PetShopFinder
 
                                 try
                                 {
-                                    if (RunSQL(responseDataDetail.result.name.Replace("'", "''"), cep, cboEstabelecimento.SelectedValue.ToString(), ref runSQL))
+                                    if (RunSQL(responseDataDetail.result.name.Replace("'", "''"), cep, cboEstabelecimento.SelectedValue.ToString(),
+                                        responseDataDetail.result.geometry.location.lat.ToString().Replace(",", "."), 
+                                        responseDataDetail.result.geometry.location.lng.ToString().Replace(",", "."), ref runSQL))
                                     {
                                         sql.AppendLine(runSQL);
                                     }
@@ -681,6 +709,14 @@ namespace PetShopFinder
                     {
                         //Requisição TextSearch
                         url = string.Format("https://maps.googleapis.com/maps/api/place/textsearch/json?pagetoken={0}&key={1}", responseData.next_page_token, key);
+
+                        txtLogRequisicao.AppendText(Environment.NewLine);
+                        txtLogRequisicao.AppendText("### nova requisição (PAGETOKEN): TEXTSEARCH");
+                        txtLogRequisicao.AppendText(Environment.NewLine);
+                        txtLogRequisicao.AppendText(url);
+                        txtLogRequisicao.AppendText(Environment.NewLine);
+                        txtLogRequisicao.AppendText(Environment.NewLine);
+
                         goto SEARCHPLACE;
                     }
                     else { url = ""; }
@@ -955,7 +991,7 @@ namespace PetShopFinder
                 if (!Directory.Exists(diretorio))
                     Directory.CreateDirectory(diretorio);
 
-                using (FileStream fs = File.Create(diretorio + "\\" + string.Format("{0:yyyyMMdd-HHmmss}", DateTime.Now) + "_Insert_" + estado + "_" + cidade + "_" + bairro + "_" + estabelecimento.Replace(" ", "") + ".txt"))
+                using (FileStream fs = File.Create(diretorio + "\\" + string.Format("{0:yyyyMMdd-HHmmss}", DateTime.Now) + "_Insert_" + estado + "_" + cidade + "_" + bairro.Replace("/", "_") + "_" + estabelecimento.Replace(" ", "") + ".txt"))
                 {
                     using (StreamWriter sw = new StreamWriter(fs))
                     {
@@ -979,7 +1015,7 @@ namespace PetShopFinder
                 if (!Directory.Exists(diretorio))
                     Directory.CreateDirectory(diretorio);
 
-                using (FileStream fs = File.Create(diretorio + "\\" + string.Format("{0:yyyyMMdd-HHmmss}", DateTime.Now) + "_Erro_Insert_" + estado + "_" + cidade + "_" + bairro + "_" + estabelecimento.Replace(" ", "") + ".txt"))
+                using (FileStream fs = File.Create(diretorio + "\\" + string.Format("{0:yyyyMMdd-HHmmss}", DateTime.Now) + "_Erro_Insert_" + estado + "_" + cidade + "_" + bairro.Replace("/", "_") + "_" + estabelecimento.Replace(" ", "") + ".txt"))
                 {
                     using (StreamWriter sw = new StreamWriter(fs))
                     {
@@ -1003,7 +1039,7 @@ namespace PetShopFinder
                 if (!Directory.Exists(diretorio))
                     Directory.CreateDirectory(diretorio);
 
-                using (FileStream fs = File.Create(diretorio + "\\" + string.Format("{0:yyyyMMdd-HHmmss}", DateTime.Now) + "_StatusRequisicao_" + estado + "_" + cidade + "_" + bairro + "_" + estabelecimento.Replace(" ", "") + ".txt"))
+                using (FileStream fs = File.Create(diretorio + "\\" + string.Format("{0:yyyyMMdd-HHmmss}", DateTime.Now) + "_StatusRequisicao_" + estado + "_" + cidade + "_" + bairro.Replace("/", "_") + "_" + estabelecimento.Replace(" ", "") + ".txt"))
                 {
                     using (StreamWriter sw = new StreamWriter(fs))
                     {
@@ -1096,7 +1132,7 @@ namespace PetShopFinder
             return query;
         }
 
-        private bool RunSQL(string key, string cep, string idTipoEstabelecimento, ref string sql)
+        private bool RunSQL(string key, string cep, string idTipoEstabelecimento, string lat, string lng, ref string sql)
         {
             bool executed = true;
 
@@ -1106,7 +1142,7 @@ namespace PetShopFinder
                 conn.Open();
 
                 //Verifica se o estabelecimento já existe no banco de dados
-                SqlCommand command = new SqlCommand("select * from Estabelecimento where nomefantasia = '" + key.Replace("'", "''") + "' and cep = '" + cep + "'", conn);
+                SqlCommand command = new SqlCommand("select * from Estabelecimento where nomefantasia = '" + key.Replace("'", "''") + "' and latitude = " + lat + " and longitude = " + lng , conn);
                 SqlDataAdapter adEstabelecimento = new SqlDataAdapter(command);
                 DataTable dtbEstabelecimentos = new DataTable();
                 adEstabelecimento.Fill(dtbEstabelecimentos);

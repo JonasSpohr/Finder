@@ -57,7 +57,6 @@
             this.txtLongitude = new System.Windows.Forms.TextBox();
             this.txtLatitude = new System.Windows.Forms.TextBox();
             this.btnImportar = new System.Windows.Forms.Button();
-            this.webBrowser1 = new System.Windows.Forms.WebBrowser();
             this.tableAdapterManager = new PetShopFinder.DBPetDataSetTableAdapters.TableAdapterManager();
             this.chkLocation = new System.Windows.Forms.CheckBox();
             this.chkBairro = new System.Windows.Forms.CheckBox();
@@ -73,6 +72,7 @@
             this.txtLogExecucao = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.txtLogRequisicao = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dBPetDataSet)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.gbxLocation.SuspendLayout();
@@ -334,18 +334,6 @@
             this.btnImportar.UseVisualStyleBackColor = false;
             this.btnImportar.Click += new System.EventHandler(this.btnImportar_Click);
             // 
-            // webBrowser1
-            // 
-            this.webBrowser1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.webBrowser1.Location = new System.Drawing.Point(298, 26);
-            this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
-            this.webBrowser1.Name = "webBrowser1";
-            this.webBrowser1.Size = new System.Drawing.Size(947, 610);
-            this.webBrowser1.TabIndex = 8;
-            this.webBrowser1.TabStop = false;
-            // 
             // tableAdapterManager
             // 
             this.tableAdapterManager.BackupDataSetBeforeUpdate = false;
@@ -548,12 +536,25 @@
             this.label1.TabIndex = 33;
             this.label1.Text = "Execução";
             // 
+            // txtLogRequisicao
+            // 
+            this.txtLogRequisicao.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtLogRequisicao.Location = new System.Drawing.Point(292, 39);
+            this.txtLogRequisicao.Multiline = true;
+            this.txtLogRequisicao.Name = "txtLogRequisicao";
+            this.txtLogRequisicao.ReadOnly = true;
+            this.txtLogRequisicao.Size = new System.Drawing.Size(943, 586);
+            this.txtLogRequisicao.TabIndex = 34;
+            // 
             // frmPrincipal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.CadetBlue;
             this.ClientSize = new System.Drawing.Size(1247, 637);
+            this.Controls.Add(this.txtLogRequisicao);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtLogExecucao);
             this.Controls.Add(this.gbxChaves);
@@ -561,7 +562,6 @@
             this.Controls.Add(this.gbxGeo);
             this.Controls.Add(this.gbxLocation);
             this.Controls.Add(this.btnMapa);
-            this.Controls.Add(this.webBrowser1);
             this.Controls.Add(this.btnImportar);
             this.Controls.Add(this.menuStrip1);
             this.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
@@ -608,7 +608,6 @@
         private System.Windows.Forms.TextBox txtLongitude;
         private System.Windows.Forms.TextBox txtLatitude;
         private System.Windows.Forms.Button btnImportar;
-        private System.Windows.Forms.WebBrowser webBrowser1;
         private DBPetDataSet dBPetDataSet;
         private DBPetDataSetTableAdapters.TableAdapterManager tableAdapterManager;
         private System.Windows.Forms.CheckBox chkLocation;
@@ -631,6 +630,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox cboEstabelecimento;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.TextBox txtLogRequisicao;
     }
 }
 
