@@ -566,6 +566,7 @@ namespace PetShopFinder
                         request = System.Net.WebRequest.Create(url);
                         response = request.GetResponse();
                         intRequisicoesEfetuadas += 1;
+
                         using (var readerDetail = new System.IO.StreamReader(response.GetResponseStream()))
                         {
                             System.Web.Script.Serialization.JavaScriptSerializer parserDetail = new System.Web.Script.Serialization.JavaScriptSerializer();
@@ -603,14 +604,19 @@ namespace PetShopFinder
                                 }
                                 //--------------------------------------------------------------------------------                                                
 
+                                cep = "";
                                 try { cep = responseDataDetail.result.address_components.Where(w => w.types[0].Equals("postal_code")).Single().long_name; } catch { }
 
+                                logradouro = "";
                                 try { logradouro = responseDataDetail.result.address_components.Where(w => w.types[0].Equals("route")).Single().long_name; } catch { }
 
+                                numero = "";
                                 try { numero = responseDataDetail.result.address_components.Where(w => w.types[0].Equals("street_number")).Single().long_name; } catch { }
 
+                                complemento = "";
                                 try { complemento = responseDataDetail.result.address_components.Where(w => w.types[0].Equals("subpremise")).Single().long_name; } catch { }
 
+                                bairro = "";
                                 try { bairro = responseDataDetail.result.address_components.Where(w => w.types[0].Equals("neighborhood")).Single().long_name; } catch { }
 
                                 if (logradouro == "")
@@ -627,6 +633,8 @@ namespace PetShopFinder
                                 int active = 1;
                                 if (!IsValidNomeFantasia(responseDataDetail.result.name))
                                     active = 0;
+
+                                bairro = string.IsNullOrWhiteSpace(bairro) ? cboBairro.Text.Replace("'", "''") : bairro.Replace("'", "''");
 
                                 runSQL = @"INSERT INTO [dbo].[Estabelecimento] 
                                            ([NomeFantasia],[PaisId],[EstadoId],[CidadeId],[CEP],[Logradouro],[Numero],[Complemento],[Ativo],
@@ -645,7 +653,7 @@ namespace PetShopFinder
                   /* Ativo                 */  active + "," +
                   /* Telefone1             */ "'" + responseDataDetail.result.formatted_phone_number + "'," +
                   /* Site                  */ "'" + responseDataDetail.result.website + "'," +
-                  /* Bairro                */ "'" + bairro.Replace("'", "''") + "'," +
+                  /* Bairro                */ "'" + bairro + "'," +
                   /* Longitude             */ responseDataDetail.result.geometry.location.lng.ToString().Replace(",", ".") + "," +
                   /* Latitude              */ responseDataDetail.result.geometry.location.lat.ToString().Replace(",", ".") + "," +
                   /* InicioSegunda         */ "'" + VerificarHorarioFuncionamento(responseDataDetail, "segunda-feira:", 0, "M") + "'," +

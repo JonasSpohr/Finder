@@ -545,6 +545,7 @@
             this.txtLogRequisicao.Multiline = true;
             this.txtLogRequisicao.Name = "txtLogRequisicao";
             this.txtLogRequisicao.ReadOnly = true;
+            this.txtLogRequisicao.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.txtLogRequisicao.Size = new System.Drawing.Size(943, 586);
             this.txtLogRequisicao.TabIndex = 34;
             // 
