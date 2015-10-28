@@ -633,6 +633,19 @@ namespace PetShopFinder
                                     bairro = GetBairro(cep);
                                 }
 
+                                var idEstado = listaEstados.Where(w => w.SiglaEstado.Equals(cboEstado.SelectedValue.ToString())).Single().IdEstado;
+                                var cidadeId = 0;
+                                var cidadeNome = string.Empty;                                
+                                try { cidadeNome = responseDataDetail.result.address_components.Where(w => w.types[0].Equals("locality")).Single().long_name; } catch { }
+
+                                if (!string.IsNullOrWhiteSpace(cidadeNome))
+                                {
+                                    cidadeId = GetCidadeId(idEstado, cidadeNome);
+                                }
+
+                                if (cidadeId == 0)
+                                    cidadeId = int.Parse(cboCidade.SelectedValue.ToString());
+
                                 txtLogRequisicao.AppendText(responseDataDetail.result.name);
                                 txtLogRequisicao.AppendText(Environment.NewLine);
 
@@ -650,8 +663,8 @@ namespace PetShopFinder
                                 runSQL +=
                   /* NomeFantasia          */ "'" + responseDataDetail.result.name.Replace("'", "''") + "'," +
                   /* PaisId                */ "1," +
-                  /* EstadoId              */ listaEstados.Where(w => w.SiglaEstado.Equals(cboEstado.SelectedValue.ToString())).Single().IdEstado + "," + //BuscarIdEstado(cboEstado.SelectedValue.ToString()) + "," +
-                                                                                                                                                          /* CidadeId              */ cboCidade.SelectedValue.ToString() + "," +
+                  /* EstadoId              */ idEstado + "," + //BuscarIdEstado(cboEstado.SelectedValue.ToString()) + "," +
+                  /* CidadeId              */  cidadeId + "," +
                   /* CEP                   */ "'" + cep + "'," +
                   /* Logradouro            */ "'" + logradouro.Replace("'", "''") + "'," +
                   /* Numero                */ "'" + numero + "'," +
@@ -1163,6 +1176,26 @@ namespace PetShopFinder
                     return dtbEstabelecimentos.Rows[0]["bai_no"].ToString();
 
                 return "";
+            }
+        }
+
+        private int GetCidadeId(int estadoId, string cidade)
+        {
+            using (SqlConnection conn = new SqlConnection(strConexao))
+            {
+
+                conn.Open();
+
+                //Verifica se o estabelecimento já existe no banco de dados
+                SqlCommand command = new SqlCommand("select * from Cidade where estadoid = " + estadoId + " and nome like '"+ cidade +"'", conn);
+                SqlDataAdapter adEstabelecimento = new SqlDataAdapter(command);
+                DataTable dtbEstabelecimentos = new DataTable();
+                adEstabelecimento.Fill(dtbEstabelecimentos);
+
+                if (dtbEstabelecimentos.Rows.Count > 0)
+                    return int.Parse(dtbEstabelecimentos.Rows[0]["CidadeId"].ToString());
+
+                return 0;
             }
         }
 
