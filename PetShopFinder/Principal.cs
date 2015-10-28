@@ -242,6 +242,7 @@ namespace PetShopFinder
             cboEstado.DataSource = listaEstados;
             cboEstado.ValueMember = "siglaEstado";
             cboEstado.DisplayMember = "NomeEstado";
+            cboEstado.SelectedIndex = 0;
 
             /*
             dtbEstados.Clear();
@@ -491,7 +492,7 @@ namespace PetShopFinder
             Thread.CurrentThread.CurrentCulture = new CultureInfo("pt-BR");
             Thread.CurrentThread.CurrentUICulture = new CultureInfo("pt-BR");
 
-        SEARCHPLACE:
+            SEARCHPLACE:
             if (!url.Contains("pagetoken"))
             {
                 //Monta a query para a requisição no google places
@@ -550,7 +551,7 @@ namespace PetShopFinder
 
                     foreach (var item in responseData.results)
                     {
-                    DETAILSPLACE:
+                        DETAILSPLACE:
                         //Requisição Detail
                         url = string.Format("https://maps.googleapis.com/maps/api/place/details/json?placeid={0}&key={1}&language=pt-BR", item.place_id, key);
 
@@ -604,11 +605,11 @@ namespace PetShopFinder
                                 }
                                 //--------------------------------------------------------------------------------                                                
 
-                                cep = "";
-                                try { cep = responseDataDetail.result.address_components.Where(w => w.types[0].Equals("postal_code")).Single().long_name; } catch { }
-
                                 logradouro = "";
                                 try { logradouro = responseDataDetail.result.address_components.Where(w => w.types[0].Equals("route")).Single().long_name; } catch { }
+
+                                cep = "";
+                                try { cep = responseDataDetail.result.address_components.Where(w => w.types[0].Equals("postal_code")).Single().long_name; } catch { }
 
                                 numero = "";
                                 try { numero = responseDataDetail.result.address_components.Where(w => w.types[0].Equals("street_number")).Single().long_name; } catch { }
@@ -617,7 +618,7 @@ namespace PetShopFinder
                                 try { complemento = responseDataDetail.result.address_components.Where(w => w.types[0].Equals("subpremise")).Single().long_name; } catch { }
 
                                 bairro = "";
-                                try { bairro = responseDataDetail.result.address_components.Where(w => w.types[0].Equals("neighborhood")).Single().long_name; } catch { }
+                                try { bairro = responseDataDetail.result.address_components.Where(w => w.types[0].Equals("sublocality_level_1")).Single().long_name; } catch { }
 
                                 if (logradouro == "")
                                 {
@@ -625,6 +626,11 @@ namespace PetShopFinder
                                     string[] elemento = endereco.Split(',');
                                     if (elemento.Length > 0) { logradouro = elemento[0]; }
                                     if (elemento.Length > 1) { numero = elemento[1]; }
+                                }
+
+                                if (!string.IsNullOrWhiteSpace(cep) && string.IsNullOrWhiteSpace(bairro))
+                                {
+                                    bairro = GetBairro(cep);
                                 }
 
                                 txtLogRequisicao.AppendText(responseDataDetail.result.name);
@@ -674,7 +680,7 @@ namespace PetShopFinder
                                 try
                                 {
                                     if (RunSQL(responseDataDetail.result.name.Replace("'", "''"), cep, cboEstabelecimento.SelectedValue.ToString(),
-                                        responseDataDetail.result.geometry.location.lat.ToString().Replace(",", "."), 
+                                        responseDataDetail.result.geometry.location.lat.ToString().Replace(",", "."),
                                         responseDataDetail.result.geometry.location.lng.ToString().Replace(",", "."), ref runSQL))
                                     {
                                         sql.AppendLine(runSQL);
@@ -692,7 +698,7 @@ namespace PetShopFinder
                         }
                     }
 
-                ATUALIZALOG:
+                    ATUALIZALOG:
                     if (sql.Length > 0)
                         CriarArquivoTxt(sql.ToString(), _estado, _cidade, _bairro, cboEstabelecimento.Text);
 
@@ -1140,6 +1146,26 @@ namespace PetShopFinder
             return query;
         }
 
+        private string GetBairro(string cep)
+        {
+            using (SqlConnection conn = new SqlConnection(strConexao))
+            {
+
+                conn.Open();
+
+                //Verifica se o estabelecimento já existe no banco de dados
+                SqlCommand command = new SqlCommand("select * from [dbo].[Vw_BaseCEP] where cep like '" + cep.Replace("-", "").Trim() + "'", conn);
+                SqlDataAdapter adEstabelecimento = new SqlDataAdapter(command);
+                DataTable dtbEstabelecimentos = new DataTable();
+                adEstabelecimento.Fill(dtbEstabelecimentos);
+
+                if (dtbEstabelecimentos.Rows.Count > 0)
+                    return dtbEstabelecimentos.Rows[0]["bai_no"].ToString();
+
+                return "";
+            }
+        }
+
         private bool RunSQL(string key, string cep, string idTipoEstabelecimento, string lat, string lng, ref string sql)
         {
             bool executed = true;
@@ -1150,7 +1176,7 @@ namespace PetShopFinder
                 conn.Open();
 
                 //Verifica se o estabelecimento já existe no banco de dados
-                SqlCommand command = new SqlCommand("select * from Estabelecimento where nomefantasia = '" + key.Replace("'", "''") + "' and latitude = " + lat + " and longitude = " + lng , conn);
+                SqlCommand command = new SqlCommand("select * from Estabelecimento where nomefantasia = '" + key.Replace("'", "''") + "' and latitude = " + lat + " and longitude = " + lng, conn);
                 SqlDataAdapter adEstabelecimento = new SqlDataAdapter(command);
                 DataTable dtbEstabelecimentos = new DataTable();
                 adEstabelecimento.Fill(dtbEstabelecimentos);

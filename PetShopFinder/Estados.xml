@@ -1,7 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <estados>
   <!--JONAS-->
-  <!--
+  <estado idEstado="1"  idPais="1" nomeEstado="Rio Grande do Sul"    siglaEstado="RS" estadoAtivo="1" />
+  <estado idEstado="13" idPais="1" nomeEstado="Rio de Janeiro"      siglaEstado="RJ" estadoAtivo="1" />
+  <estado idEstado="18" idPais="1" nomeEstado="Paraná"              siglaEstado="PR" estadoAtivo="1" />
+  <estado idEstado="27" idPais="1" nomeEstado="Pernambuco"          siglaEstado="PE" estadoAtivo="1" />
+  <estado idEstado="6"  idPais="1" nomeEstado="Piauí"               siglaEstado="PI" estadoAtivo="1" />
+  <estado idEstado="7"  idPais="1" nomeEstado="Rio Grande do Norte" siglaEstado="RN" estadoAtivo="1" />
+  
   <estado idEstado="9"  idPais="1" nomeEstado="Distrito Federal"    siglaEstado="DF" estadoAtivo="1" />
   <estado idEstado="21" idPais="1" nomeEstado="Bahia"               siglaEstado="BA" estadoAtivo="1" />
   <estado idEstado="17" idPais="1" nomeEstado="Espírito Santo"      siglaEstado="ES" estadoAtivo="1" />
@@ -11,31 +17,5 @@
   <estado idEstado="26" idPais="1" nomeEstado="Amapá"               siglaEstado="AP" estadoAtivo="1" />
   <estado idEstado="20" idPais="1" nomeEstado="Amazonas"            siglaEstado="AM" estadoAtivo="1" />
   <estado idEstado="14" idPais="1" nomeEstado="Acre"                siglaEstado="AC" estadoAtivo="1" />
-  -->
-  <!--BRUNO-->
-  <!--
-  <estado idEstado="23" idPais="1" nomeEstado="Minas Gerais"        siglaEstado="MG" estadoAtivo="1" />
-  <estado idEstado="28" idPais="1" nomeEstado="Mato Grosso"         siglaEstado="MT" estadoAtivo="1" />
-  <estado idEstado="24" idPais="1" nomeEstado="Mato Grosso do Sul"  siglaEstado="MS" estadoAtivo="1" />
-  <estado idEstado="3"  idPais="1" nomeEstado="Maranhão"            siglaEstado="MA" estadoAtivo="1" />
-  <estado idEstado="10" idPais="1" nomeEstado="Pará"                siglaEstado="PA" estadoAtivo="1" />
-  <estado idEstado="5"  idPais="1" nomeEstado="Paraíba"             siglaEstado="PB" estadoAtivo="1" />
-  -->
-  <!--VINICIUS-->
-  <!--
-  <estado idEstado="1"  idPais="1" nomeEstado="Rio Grande do Sul"   siglaEstado="RS" estadoAtivo="1" />
-  <estado idEstado="13" idPais="1" nomeEstado="Rio de Janeiro"      siglaEstado="RJ" estadoAtivo="1" />
-  <estado idEstado="18" idPais="1" nomeEstado="Paraná"              siglaEstado="PR" estadoAtivo="1" />
-  <estado idEstado="27" idPais="1" nomeEstado="Pernambuco"          siglaEstado="PE" estadoAtivo="1" />
-  <estado idEstado="6"  idPais="1" nomeEstado="Piauí"               siglaEstado="PI" estadoAtivo="1" />
-  <estado idEstado="7"  idPais="1" nomeEstado="Rio Grande do Norte" siglaEstado="RN" estadoAtivo="1" />
-
-  -->
-  <!--RENATO-->
-  <estado idEstado="8"  idPais="1" nomeEstado="São Paulo"           siglaEstado="SP" estadoAtivo="1" />
-  <estado idEstado="19" idPais="1" nomeEstado="Santa Catarina"      siglaEstado="SC" estadoAtivo="1" />
-  <estado idEstado="16" idPais="1" nomeEstado="Rondônia"            siglaEstado="RO" estadoAtivo="1" />
-  <estado idEstado="25" idPais="1" nomeEstado="Roraima"             siglaEstado="RR" estadoAtivo="1" />
-  <estado idEstado="12" idPais="1" nomeEstado="Sergipe"             siglaEstado="SE" estadoAtivo="1" />
-  <estado idEstado="22" idPais="1" nomeEstado="Tocantins"           siglaEstado="TO" estadoAtivo="1" />
+  
 </estados>
