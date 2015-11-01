@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <chaves>
-  <!--JONAS-->
   <chave idChave="AIzaSyD7M4pl_UjiwwAsKJ3XRLsjhzyVVfcWECI" />
   <chave idChave="AIzaSyBWe7G1rXqmiv_5f-vXszDp9MsFwqzTqr4" />
   <chave idChave="AIzaSyAuKJeYaSz6iWld3xSwMamY6MDZRkiylDo" />
@@ -51,28 +50,4 @@
   <chave idChave="AIzaSyCmiT8Nwi7fwdLcOlm2UqypAqGO9qYgcHg" />
   <chave idChave="AIzaSyAIaXbkF1RidC19r5yp6dcoDl2P7OwwIGM" />
   <chave idChave="AIzaSyB0AgUJogNazufbUsXMxqVok0JzBxPf-aE" />
-  
-  
-  <chave idChave="AIzaSyB_RUeIcIT7ahF6vfHTscJAq0uS15nxup8" />
-  <chave idChave="AIzaSyAhaD4HwgofkA2_9Z7fLbGB1V8Shi-S7do" />
-  <chave idChave="AIzaSyACrhLbvkfmagxsM-Cu0lJGdFTdOmXGyQ4" />
-  <chave idChave="AIzaSyBYF3F1YMvbBKGStenQKhyVnYElq4NRtV4" />
-  <chave idChave="AIzaSyDBIitHFg2nKCLKl6iUdNCsFBmfHjpFHZA" />
-  <chave idChave="AIzaSyCYrVTYw8VcQLH0P-46KOEdP4PwCMiO6vQ" />
-  <chave idChave="AIzaSyAQsH68kMZDN6PTyKyzJmVwSUJ-n_2eF9E" />
-  <chave idChave="AIzaSyB5wNDviYX9Zitec1YKjVNwHuneGMUyHNQ" />
-  <chave idChave="AIzaSyCVZHRBjtL0g_TZsIyNFAvVXr11xiwMCRE" />
-  <chave idChave="AIzaSyApk_yXJ9JWRE9ugv0mgJNDME15uZRWmvY" />
-  <chave idChave="AIzaSyAWbnoQ-uwI5YhmVmH4w6aM5wAViUERXHM" />
-  <chave idChave="AIzaSyAcJuX80VH4bE0z-B5F8zlN2z78R1Vjr_U" />
-  <chave idChave="AIzaSyC86oQONQ5avFjzxdT6yIwaFiS5E-ausDE" />
-  <chave idChave="AIzaSyAF9p3cMmjx7MEBXGCxky8lmXMAumvXd38" />
-  <chave idChave="AIzaSyA-u2gYoXdBAnwiUGkwXY5jSfVcKhWb25s" />
-  <chave idChave="AIzaSyCH7VplcrxpMNkxd6sP_RvSTQgA7K8MU9E" />
-  <chave idChave="AIzaSyDZpNIIFVHvOZKowQ6-cZR7k3VquIQziKg" />
-
-  <chave idChave="AIzaSyD7M4pl_UjiwwAsKJ3XRLsjhzyVVfcWECI" />
-  <chave idChave="AIzaSyBWe7G1rXqmiv_5f-vXszDp9MsFwqzTqr4" />
-  <chave idChave="AIzaSyAuKJeYaSz6iWld3xSwMamY6MDZRkiylDo" />
-  <chave idChave="AIzaSyAKlksgMuLJKcZ5fvAN_14mnimmyyWJXz8" />
 </chaves>

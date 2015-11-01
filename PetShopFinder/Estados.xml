@@ -1,21 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <estados>
-  <!--JONAS-->
-  <estado idEstado="1"  idPais="1" nomeEstado="Rio Grande do Sul"    siglaEstado="RS" estadoAtivo="1" />
-  <estado idEstado="13" idPais="1" nomeEstado="Rio de Janeiro"      siglaEstado="RJ" estadoAtivo="1" />
-  <estado idEstado="18" idPais="1" nomeEstado="Paraná"              siglaEstado="PR" estadoAtivo="1" />
-  <estado idEstado="27" idPais="1" nomeEstado="Pernambuco"          siglaEstado="PE" estadoAtivo="1" />
-  <estado idEstado="6"  idPais="1" nomeEstado="Piauí"               siglaEstado="PI" estadoAtivo="1" />
-  <estado idEstado="7"  idPais="1" nomeEstado="Rio Grande do Norte" siglaEstado="RN" estadoAtivo="1" />
-  
-  <estado idEstado="9"  idPais="1" nomeEstado="Distrito Federal"    siglaEstado="DF" estadoAtivo="1" />
-  <estado idEstado="21" idPais="1" nomeEstado="Bahia"               siglaEstado="BA" estadoAtivo="1" />
-  <estado idEstado="17" idPais="1" nomeEstado="Espírito Santo"      siglaEstado="ES" estadoAtivo="1" />
-  <estado idEstado="2"  idPais="1" nomeEstado="Goiás"               siglaEstado="GO" estadoAtivo="1" />  
-  <estado idEstado="4"  idPais="1" nomeEstado="Ceará"               siglaEstado="CE" estadoAtivo="1" />
-  <estado idEstado="15" idPais="1" nomeEstado="Alagoas"             siglaEstado="AL" estadoAtivo="1" />
-  <estado idEstado="26" idPais="1" nomeEstado="Amapá"               siglaEstado="AP" estadoAtivo="1" />
-  <estado idEstado="20" idPais="1" nomeEstado="Amazonas"            siglaEstado="AM" estadoAtivo="1" />
-  <estado idEstado="14" idPais="1" nomeEstado="Acre"                siglaEstado="AC" estadoAtivo="1" />
-  
+  <estado idEstado="8"  idPais="1" nomeEstado="São Paulo"           siglaEstado="SP" estadoAtivo="1" />
+  <estado idEstado="19" idPais="1" nomeEstado="Santa Catarina"      siglaEstado="SC" estadoAtivo="1" />
+  <estado idEstado="16" idPais="1" nomeEstado="Rondônia"            siglaEstado="RO" estadoAtivo="1" />
+  <estado idEstado="25" idPais="1" nomeEstado="Roraima"             siglaEstado="RR" estadoAtivo="1" />
+  <estado idEstado="12" idPais="1" nomeEstado="Sergipe"             siglaEstado="SE" estadoAtivo="1" />
+  <estado idEstado="22" idPais="1" nomeEstado="Tocantins"           siglaEstado="TO" estadoAtivo="1" />
 </estados>
