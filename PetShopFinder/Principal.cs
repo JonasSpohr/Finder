@@ -664,10 +664,10 @@ namespace PetShopFinder
                   /* NomeFantasia          */ "'" + responseDataDetail.result.name.Replace("'", "''") + "'," +
                   /* PaisId                */ "1," +
                   /* EstadoId              */ idEstado + "," + //BuscarIdEstado(cboEstado.SelectedValue.ToString()) + "," +
-                  /* CidadeId              */  cidadeId + "," +
+                  /* CidadeId              */ cidadeId + "," +
                   /* CEP                   */ "'" + cep + "'," +
                   /* Logradouro            */ "'" + logradouro.Replace("'", "''") + "'," +
-                  /* Numero                */ "'" + numero + "'," +
+                  /* Numero                */ "'" + numero.Replace("'", "''") + "'," +
                   /* Complemento           */ "'" + complemento.Replace("'", "''") + "'," +
                   /* Ativo                 */  active + "," +
                   /* Telefone1             */ "'" + responseDataDetail.result.formatted_phone_number + "'," +
@@ -1187,7 +1187,7 @@ namespace PetShopFinder
                 conn.Open();
 
                 //Verifica se o estabelecimento já existe no banco de dados
-                SqlCommand command = new SqlCommand("select * from Cidade where estadoid = " + estadoId + " and nome like '"+ cidade +"'", conn);
+                SqlCommand command = new SqlCommand("select * from Cidade where estadoid = " + estadoId + " and nome like '"+ cidade.Replace("'","''") +"'", conn);
                 SqlDataAdapter adEstabelecimento = new SqlDataAdapter(command);
                 DataTable dtbEstabelecimentos = new DataTable();
                 adEstabelecimento.Fill(dtbEstabelecimentos);
@@ -1209,7 +1209,7 @@ namespace PetShopFinder
                 conn.Open();
 
                 //Verifica se o estabelecimento já existe no banco de dados
-                SqlCommand command = new SqlCommand("select * from Estabelecimento where nomefantasia = '" + key.Replace("'", "''") + "' and latitude = " + lat + " and longitude = " + lng, conn);
+                SqlCommand command = new SqlCommand("select * from Estabelecimento where nomefantasia = '" + key + "' and latitude = " + lat + " and longitude = " + lng, conn);
                 SqlDataAdapter adEstabelecimento = new SqlDataAdapter(command);
                 DataTable dtbEstabelecimentos = new DataTable();
                 adEstabelecimento.Fill(dtbEstabelecimentos);
